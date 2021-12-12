@@ -101,17 +101,18 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 	}
 	else if (pos1 == 6) {
 		endRead = 1;
-		pos1=0;
-	}
-	
-	if (endRead){
-		endRead = 0;
-		printk(KERN_INFO "Succesfully read from file\n");
-		return 0;
 	}
 	
 	up(&sem);
 	wake_up_interruptible(&writeQ);
+	
+	if (endRead){
+		endRead = 0;
+		printk(KERN_INFO "Succesfully read from file\n");
+		pos1=0;
+		return 0;
+	}
+	
 	return len;
 }
 
@@ -182,7 +183,7 @@ ssize_t alu_write(struct file *pfile, const char __user *buffer, size_t length, 
 				if(pos1 >=0 && pos1 <=3)
 				{
 					alu[pos1] = value; 
-					//printk(KERN_INFO "Succesfully wrote value %d in  %s\n", value, position1); 
+					printk(KERN_INFO "Succesfully wrote value in  register\n", value, position1); 
 				}
 				else
 				{
@@ -273,7 +274,7 @@ ssize_t alu_write(struct file *pfile, const char __user *buffer, size_t length, 
 			}
 			
 		}
-		//VARIJANTA 3
+		//VARIJANTA 3 Unos formata
 		else if (ret==1)
 		{
 			if(strcmp(format,"dec")==0)
