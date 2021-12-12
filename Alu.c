@@ -294,6 +294,7 @@ static int __init alu_init(void)
 {
     int ret = 0;
 	int i=0;
+	sema_init(&sem,1);
 
 	//Initialize array
 	for (i=0; i<6; i++)
