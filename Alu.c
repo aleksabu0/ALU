@@ -71,6 +71,10 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 	
 	if(down_interruptible(&sem))
 		return -ERESTARTSYS;
+	if(pos1<4)
+	{
+		printk(KERN_INFO "Potrebno je izvrsiti operaciju pre citanja\n");
+	}	
 	while(pos1 < 4)
 	{
 		up(&sem);
@@ -98,7 +102,7 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 			return -EFAULT;
 		pos1 ++;
 	}
-	if (pos1 == 6) {
+	else if (pos1 == 6) {
 		endRead = 1;
 		pos1=0;
 	}
@@ -122,6 +126,10 @@ ssize_t alu_write(struct file *pfile, const char __user *buffer, size_t length, 
 		return -EFAULT;
 	buff[length-1] = '\0';
 	
+	if(pos1>=4 || pos2>=4)
+	{
+		printk(KERN_INFO "Potrebno je izvrsiti citanje pre sledece operacije\n");
+	}	
 	if(down_interruptible(&sem))
 		return -ERESTARTSYS;
 	while(pos1 >= 4 || pos2 >=4)
