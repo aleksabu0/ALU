@@ -9,6 +9,8 @@
 #include <linux/kdev_t.h>
 #include <linux/uaccess.h>
 #include <linux/errno.h>
+#include <linux/wait.h>
+#include <linux/semaphore.h>
 #define BUFF_SIZE 20
 
 MODULE_LICENSE("Dual BSD/GPL");
@@ -67,7 +69,7 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 		return 0;
 	}
 	
-	/*if(down_interruptible(&sem))
+	if(down_interruptible(&sem))
 		return -ERESTARTSYS;
 	while(pos1 < 4)
 	{
@@ -76,7 +78,7 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 			return -ERESTARTSYS;
 		if(down_interruptible(&sem))
 			return -ERESTARTSYS;
-	}*/
+	}
 	if(pos1>=4 && pos1<6)
 	{	
 		if(form==1)
@@ -100,8 +102,8 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 		endRead = 1;
 		pos1=0;
 	}
-	/*up(&sem);
-	wake_up_interruptible(&writeQ);*/
+	up(&sem);
+	wake_up_interruptible(&writeQ);
 	return len;
 }
 
@@ -120,7 +122,7 @@ ssize_t alu_write(struct file *pfile, const char __user *buffer, size_t length, 
 		return -EFAULT;
 	buff[length-1] = '\0';
 	
-	/*if(down_interruptible(&sem))
+	if(down_interruptible(&sem))
 		return -ERESTARTSYS;
 	while(pos1 >= 4 || pos2 >=4)
 	{
@@ -129,7 +131,7 @@ ssize_t alu_write(struct file *pfile, const char __user *buffer, size_t length, 
 			return -ERESTARTSYS;
 		if(down_interruptible(&sem))
 			return -ERESTARTSYS;
-	}*/
+	}
 	
 	if(pos1<4 && pos2<4)
 		{	
@@ -282,8 +284,8 @@ ssize_t alu_write(struct file *pfile, const char __user *buffer, size_t length, 
 		printk(KERN_WARNING "Wrong command format\nexpected: regX=num\n X=A,B,C,D\n\num={0-255}\n");
 	}
 	
-	/*up(&sem);
-	wake_up_interruptible(&readQ);*/
+	up(&sem);
+	wake_up_interruptible(&readQ);
 
 	return length;
 }
