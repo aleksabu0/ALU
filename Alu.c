@@ -72,12 +72,10 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 	
 	if(down_interruptible(&sem))
 		return -ERESTARTSYS;
-	if(pos1<4)
-	{
-		printk(KERN_INFO "Potrebno je izvrsiti operaciju pre citanja\n");
-	}	
+	
 	while(pos1 < 4)
 	{
+		printk(KERN_INFO "Potrebno je izvrsiti operaciju pre citanja\n");
 		up(&sem);
 		if(wait_event_interruptible(readQ,(pos1>=4)))
 			return -ERESTARTSYS;
@@ -103,7 +101,7 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 			return -EFAULT;
 		pos1 ++;
 	}
-	else if (pos1 == 5) {
+	else if (pos1 == 6) {
 		endRead = 1;
 		pos1=0;
 	}
