@@ -66,7 +66,7 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 	
 	if(pos1<4)
 	{
-		printk(KERN_INFO "Potrebno je izvrsiti operaciju pre citanja\n");
+		printk(KERN_INFO "Potrebno je izvrsiti operaciju pre sledeceg citanja\n");
 	}	
 	
 	if(down_interruptible(&sem))
@@ -88,7 +88,17 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 		}
 		else if (form==2)
 		{
-			len = scnprintf(buff,BUFF_SIZE , "%d ", alu[pos1]);
+			int a[10];
+			int n=alu[pos1];
+			for(i=0;n>0;i++)    
+			{    
+				a[i]=n%2;    
+				n=n/2;    
+			}  
+			for(int i=i-1;i>=0;i--)    
+			{
+				len = scnprintf(buff,BUFF_SIZE , "%d ", a[i]);
+			}
 		}
 		else if (form==3)
 		{
