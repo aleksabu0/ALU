@@ -183,7 +183,7 @@ ssize_t alu_write(struct file *pfile, const char __user *buffer, size_t length, 
 				if(pos1 >=0 && pos1 <=3)
 				{
 					alu[pos1] = value; 
-					printk(KERN_INFO "Succesfully wrote value in  register\n", value, position1); 
+					printk(KERN_INFO "Succesfully wrote value in  register\n"); 
 				}
 				else
 				{
