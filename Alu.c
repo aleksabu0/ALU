@@ -88,17 +88,26 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 		}
 		else if (form==2)
 		{
+			int i;
 			int a[10];
 			int n=alu[pos1];
+			int var1=0;
+			int cnt;
+			int exp=1;
 			for(i=0;n>0;i++)    
 			{    
 				a[i]=n%2;    
-				n=n/2;    
+				n=n/2;
+				cnt=i;
 			}  
-			for(int i=i-1;i>=0;i--)    
+			for(i=0;i<=cnt;i++)
 			{
-				len = scnprintf(buff,BUFF_SIZE , "%d ", a[i]);
+				var1+=a[i]*exp;
+				exp=exp*10;
 			}
+			alu[pos1]=var1;
+			len = scnprintf(buff,BUFF_SIZE , "%d ", alu[pos1]);
+			
 		}
 		else if (form==3)
 		{
