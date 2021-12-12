@@ -63,6 +63,7 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 	int ret;
 	char buff[BUFF_SIZE];
 	long int len=0;
+	
 	if (endRead){
 		endRead = 0;
 		printk(KERN_INFO "Succesfully read from file\n");
@@ -102,7 +103,7 @@ ssize_t alu_read(struct file *pfile, char __user *buffer, size_t length, loff_t 
 			return -EFAULT;
 		pos1 ++;
 	}
-	else if (pos1 == 6) {
+	else if (pos1 == 5) {
 		endRead = 1;
 		pos1=0;
 	}
